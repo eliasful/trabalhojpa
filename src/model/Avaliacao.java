@@ -40,6 +40,14 @@ public class Avaliacao implements Serializable {
         this.nota = nota;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Livro getLivro() {
         return livro;
     }
