@@ -1,10 +1,12 @@
 package dao;
 
+import java.util.List;
 import model.Editora;
 import model.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import model.Autor;
 
 public class EditoraDAO {
 
@@ -75,6 +77,21 @@ public class EditoraDAO {
                 transaction.rollback();
             }
             throw new Exception(ex);
+        } finally {
+            if (em != null){
+                em.close();
+            }
+        }
+    }
+    
+    public List<Editora> findAll()  {
+        EntityManager em = null;
+        try {
+            em = ConnectionDB.newEntityManager();
+            return em.createQuery("from Editora e").getResultList();
+        } catch(Exception ex){
+            System.out.println(ex);
+            return null;
         } finally {
             if (em != null){
                 em.close();

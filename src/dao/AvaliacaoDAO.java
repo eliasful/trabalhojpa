@@ -1,10 +1,12 @@
 package dao;
 
+import java.util.List;
 import model.Avaliacao;
 import model.Editora;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import model.Livro;
 
 public class AvaliacaoDAO {
 
@@ -75,6 +77,44 @@ public class AvaliacaoDAO {
                 transaction.rollback();
             }
             throw new Exception(ex);
+        } finally {
+            if (em != null){
+                em.close();
+            }
+        }
+    }
+    
+    public List<Avaliacao> findByLocal(String local)  {
+        EntityManager em = null;
+        try {
+            em = ConnectionDB.newEntityManager();
+            return em.createQuery("from Avaliacao a "
+                    + " join a.usuario u "
+                    + " where u.local = :local")
+                    .setParameter("local", local)
+                    .getResultList();
+        } catch(Exception ex){
+            System.out.println(ex);
+            return null;
+        } finally {
+            if (em != null){
+                em.close();
+            }
+        }
+    }
+    
+    public List<Avaliacao> findByAvaliacao(int ano)  {
+        EntityManager em = null;
+        try {
+            em = ConnectionDB.newEntityManager();
+            return em.createQuery("from Avaliacao a "
+                    + " join a.livro l "
+                    + " where l.ano = :ano")
+                    .setParameter("ano", ano)
+                    .getResultList();
+        } catch(Exception ex){
+            System.out.println(ex);
+            return null;
         } finally {
             if (em != null){
                 em.close();

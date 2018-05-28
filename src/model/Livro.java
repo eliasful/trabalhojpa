@@ -83,6 +83,14 @@ public class Livro {
         this.editora = editora;
     }
 
+    public Collection<Avaliacao> getAvaliacoes() {
+        return avaliacoes;
+    }
+
+    public void setAvaliacoes(Collection<Avaliacao> avaliacoes) {
+        this.avaliacoes = avaliacoes;
+    }
+
     
   
     @Override

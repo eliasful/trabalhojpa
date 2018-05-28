@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.List;
 import model.Editora;
 import model.Livro;
 
@@ -75,6 +76,21 @@ public class LivroDAO {
                 transaction.rollback();
             }
             throw new Exception(ex);
+        } finally {
+            if (em != null){
+                em.close();
+            }
+        }
+    }
+
+    public List<Livro> findAll()  {
+        EntityManager em = null;
+        try {
+            em = ConnectionDB.newEntityManager();
+            return em.createQuery("from Livro l").getResultList();
+        } catch(Exception ex){
+            System.out.println(ex);
+            return null;
         } finally {
             if (em != null){
                 em.close();

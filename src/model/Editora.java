@@ -41,6 +41,14 @@ public class Editora {
         this.nome = nome;
     }
 
+    public Collection<Livro> getLivros() {
+        return livros;
+    }
+
+    public void setLivros(Collection<Livro> livros) {
+        this.livros = livros;
+    }
+
     @Override
     public String toString() {
         return nome;

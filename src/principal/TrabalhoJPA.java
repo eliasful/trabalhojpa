@@ -7,8 +7,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -43,13 +46,51 @@ public class TrabalhoJPA {
         cadastrarUsuarios();
         cadastrarLivros();
         cadastrarAvaliacoes();
+        
+        LivroDAO livroDAO = new LivroDAO();
+        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
+        EditoraDAO editoraDAO = new EditoraDAO();
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        AutorDAO autorDAO = new AutorDAO();
+        
+        //1
+        System.out.println("Liste todos os livros.");
+        livroDAO.findAll().forEach(System.out::println);
+        
+        //2
+        System.out.println("Dado um nome de pa´ıs X, a quantidade de usu´arios que avaliaram pelo menos 2 livros");
+        System.out.println(avaliacaoDAO.findByLocal("nyc, new york, usa").size());
+        
+        //3
+        System.out.println("Liste os t´ıtulos dos livros que brasileiros avaliaram e as suas notas.");
+        avaliacaoDAO.findByLocal("rio de janeiro, rio de janeiro, brazil").forEach(System.out::println);
+        
+        //4
+        System.out.println("Liste os t´ıtulos dos X livros livros mais bem avaliados no ano Y.");
+        avaliacaoDAO.findByAvaliacao(2001).stream()
+                .sorted(Comparator.comparing(Avaliacao::getNota))
+                .limit(6).forEach((t) -> {
+            System.out.println(t.getLivro());
+        });
+        
+        //5
+        System.out.println("Para cada autor, liste o n´umero de livros avaliados e sua m´edia de nota.");
+        autorDAO.findAll().forEach((t) -> {
+            System.out.println(t.getNome() + ": " + t.getLivros());
+        });
+        
+        //6
+        System.out.println("Para cada editora, o n´umero de livros cadastrados.");
+        editoraDAO.findAll().forEach((t) -> {
+            System.out.println(t.getNome() + ": " + t.getLivros().size());
+        });
     }
 
     private void disconnect() throws SQLException {
         connection.disconnect();
     }
 
-    public void cadastrarLivros() {
+    private void cadastrarLivros() {
         String arquivoCSV = "BX-Books.csv";
         BufferedReader br = null;
         String linha = "";
@@ -151,7 +192,7 @@ public class TrabalhoJPA {
         }
     }
 
-    public void cadastrarAvaliacoes() {
+    private void cadastrarAvaliacoes() {
         String arquivoCSV = "BX-Book-Ratings.csv";
         BufferedReader br = null;
         String linha = "";
