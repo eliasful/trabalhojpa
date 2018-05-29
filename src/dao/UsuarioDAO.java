@@ -68,7 +68,6 @@ public class UsuarioDAO {
 
             Usuario userMerged = em.merge(user);
             transaction.commit();
-            em.flush();
             return userMerged.getId();
         } catch (Exception ex){
             if (transaction != null && transaction.isActive()){
